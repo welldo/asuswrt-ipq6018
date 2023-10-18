@@ -935,6 +935,7 @@ static int setAllSpecificColorLedOn(enum ate_led_color color)
 	case MODEL_RTAX18:
 	case MODEL_RTAX5:
 	case MODEL_RTW212X:
+	case MODEL_RTMANGO:
 		{
 			static enum led_id blue_led[] = {
 				LED_BLUE,
@@ -948,7 +949,7 @@ static int setAllSpecificColorLedOn(enum ate_led_color color)
 				LED_RED,
 				LED_ID_MAX
 			};
-#if defined(RTAC59_CD6R) || defined(RTAC59_CD6N) || defined(PLAX56_XP4) || defined(RT360V6) || defined(RTAX18) ||defined(RTAX5) ||defined(RTW212X)
+#if defined(RTAC59_CD6R) || defined(RTAC59_CD6N) || defined(PLAX56_XP4) || defined(RT360V6) || defined(RTAX18) ||defined(RTAX5) ||defined(RTW212X) ||defined(RTMANGO)
 			static enum led_id white_led[] = {
 				LED_WHITE,
 				LED_ID_MAX
@@ -3755,7 +3756,7 @@ int ate_dev_status(void)
 		}else{
 			have_bt_device = 0;
 		}
-#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X)
+#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X) ||defined(RTMANGO)
 			have_bt_device = 0;
 #endif
 #if defined(RTAX56_XD4)

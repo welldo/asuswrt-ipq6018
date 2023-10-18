@@ -3832,3 +3832,4 @@ CONFIG_VIRTUALIZATION=y
 # CONFIG_RTAX18 is not set
 # CONFIG_RTAX5 is not set
 # CONFIG_RTW212X is not set
+# CONFIG_RTMANGO is not set

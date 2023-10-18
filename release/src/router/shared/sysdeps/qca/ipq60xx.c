@@ -68,7 +68,7 @@ enum {
 #endif
 
 static const char *upstream_iptv_ifaces[16] = {
-#if defined(PLAX56_XP4) || defined(RT360V6) || defined(RTAX18) || defined(RTAX5) || defined(RTW212X)
+#if defined(PLAX56_XP4) || defined(RT360V6) || defined(RTAX18) || defined(RTAX5) || defined(RTW212X) ||defined(RTMANGO)
 	[WANS_DUALWAN_IF_WAN] = "eth4",
 #else
 #error Define WAN interfaces that can be used as upstream port of IPTV.
@@ -95,7 +95,7 @@ static const int lan_wan_partition[9][NR_WANLAN_PORT] = {
  * 			e.g. LAN1_PORT, LAN2_PORT, etc.
  * array element:	PHY address, negative value means absent PHY.
  */
-#if defined(RT360V6) ||defined(RTAX18)|| defined(RTAX5) || defined(RTW212X) /* normal case  */
+#if defined(RT360V6) ||defined(RTAX18)|| defined(RTAX5) || defined(RTW212X) ||defined(RTMANGO) /* normal case  */
 static const int vport_to_phy_addr[MAX_WANLAN_PORT] = {
 	1, 2, 3, 4, 5,
 };
@@ -118,7 +118,7 @@ static const int vport_to_phy_addr[MAX_WANLAN_PORT] = {
  * 			e.g. LAN1_PORT, LAN2_PORT, etc.
  * array element:	Interface name of specific virtual port.
  */
-#if defined(RT360V6) || defined(RTAX18) || defined(RTAX5) || defined(RTW212X) /* normal case  */
+#if defined(RT360V6) || defined(RTAX18) || defined(RTAX5) || defined(RTW212X) ||defined(RTMANGO) /* normal case  */
 static const char *vport_to_iface[MAX_WANLAN_PORT] = {
 	"eth0", "eth1", "eth2", "eth3",		/* LAN1~4 */
 	"eth4" 					/* WAN1 */
@@ -1193,7 +1193,7 @@ void __post_config_switch(void)
 	_eval(ipq807x_p1_8023az, DBGOUT, 0, NULL);
 #endif
 #endif
-#if defined(PLAX56_XP4) || defined(RT360V6) || defined(RTAX18) || defined(RTAX5) || defined(RTW212X)
+#if defined(PLAX56_XP4) || defined(RT360V6) || defined(RTAX18) || defined(RTAX5) || defined(RTW212X) ||defined(RTMANGO)
 	eval("devmem", "0x0009b794", "w", "0x7c7d"); // improve switch voltage (011 to 111) to avoid packet loss
 #endif
 }

@@ -6875,7 +6875,7 @@ void start_dbus_daemon(void)
 		/* Slave, no bluetooth */
 		return;
 	}
-#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X)
+#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X) ||defined(RTMANGO)
 		return;
 #endif
 #if defined(RTAX56_XD4)
@@ -6906,7 +6906,7 @@ void stop_dbus_daemon(void)
 		/* Slave, no bluetooth */
 		return;
 	}
-#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X)
+#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X) ||defined(RTMANGO)
 		return;
 #endif
 #if defined(RTAX56_XD4)
@@ -7210,7 +7210,7 @@ void ble_rename_ssid(void)
 		/* Slave, no bluetooth */
 		return;
 	}
-#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X)
+#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X) ||defined(RTMANGO)
 		return;
 #endif
 #if defined(RTAX56_XD4)
@@ -7255,7 +7255,7 @@ void start_bluetooth_service(void)
 		/* Slave, no bluetooth */
 		return;
 	}
-#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X)
+#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X) ||defined(RTMANGO)
 		return;
 #endif
 #if defined(RTAX56_XD4)
@@ -7372,7 +7372,7 @@ void stop_bluetooth_service(void)
 		/* Slave, no bluetooth */
 		return;
 	}
-#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X)
+#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X) ||defined(RTMANGO)
 		return;
 #endif
 #if defined(RTAX56_XD4)

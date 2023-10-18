@@ -1097,7 +1097,7 @@ static const char *query_ifname[PORT_UNITS] = { //Aimesh RE
 #elif defined(PLAX56_XP4)
 //	P0	P1	P2	P3	P4	P5
 	"eth2",	"eth3",	"eth1",	NULL,	"eth4",	NULL
-#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) || defined(RTW212X)
+#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) || defined(RTW212X) ||defined(RTMANGO)
 //	P0	P1	P2	P3	P4	P5
 	"eth0",	"eth1",	"eth2",	"eth3",	"eth4",	"eth5"
 #else

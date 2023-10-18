@@ -7926,7 +7926,7 @@ static void bt_turn_off_service()
 		/* Slave, no bluetooth */
 		return;
 	}
-#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X)
+#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X) ||defined(RTMANGO)
 		return;
 #endif
 #if defined(RTAX56_XD4)
@@ -9042,7 +9042,7 @@ static void bluetooth_check()
 		/* Slave, no bluetooth */
 		return;
 	}
-#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X)
+#elif defined(RT360V6) || defined(RTAX18) || defined(RTAX5) ||defined(RTW212X) ||defined(RTMANGO)
 		return;
 #endif
 #if defined(RTAX56_XD4)

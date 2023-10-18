@@ -18,5 +18,8 @@ config RTAX5
 config RTW212X
 	bool "RT-W212X (IPQ6018 + QCA7550)"
 
+config RTMANGO
+	bool "RT-MANGO (IPQ6018 + QCA7550)"
+
 endchoice
 

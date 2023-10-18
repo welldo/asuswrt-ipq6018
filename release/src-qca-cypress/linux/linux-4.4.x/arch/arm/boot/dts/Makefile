@@ -566,6 +566,8 @@ dtb-$(CONFIG_RTAX5) += qcom-ipq6018-rt-ax5.dtb
 dtb-$(CONFIG_RTAX5) += qcom-ipq6018-rt-ax5-ubi.dtb
 dtb-$(CONFIG_RTW212X) += qcom-ipq6018-rt-w212x.dtb
 dtb-$(CONFIG_RTW212X) += qcom-ipq6018-rt-w212x-ubi.dtb
+dtb-$(CONFIG_RTMANGO) += qcom-ipq6018-rt-mango.dtb
+dtb-$(CONFIG_RTMANGO) += qcom-ipq6018-rt-mango-ubi.dtb
 dtb-$(CONFIG_ARCH_QCOM) += \
 	qcom-ipq6018-cp01-c1.dtb \
 	qcom-ipq6018-cp02-c1.dtb \
