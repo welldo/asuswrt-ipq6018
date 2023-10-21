@@ -425,7 +425,7 @@ void net_init(void)
 int net_loop(enum proto_t protocol)
 {
 	int ret = -EINVAL;
-#if defined(CONFIG_ASUS_PRODUCT) && !defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO) && !defined(RTAX18)
+#if defined(CONFIG_ASUS_PRODUCT) && !defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO) && !defined(RTAX18) && !defined(RT360V6)
 	void (*func_led_off)(void) = power_led_off;
 	void (*func_led_on)(void) = power_led_on;
 	int i=0;
@@ -605,12 +605,12 @@ restart:
 	 */
 
 #ifdef CONFIG_ASUS_PRODUCT
-#if !defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO) && !defined(RTAX18)
+#if !defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO) && !defined(RTAX18) && !defined(RT360V6)
 	i = g_led_intv;
 #endif
 	time_delta = CONFIG_SYS_HZ;
 	if (ubi_damaged == 1) {
-#if !defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO) && !defined(RTAX18)
+#if !defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO) && !defined(RTAX18) && !defined(RT360V6)
 		func_led_off = all_leds_off;
 		func_led_on = all_leds_on;
 #endif
@@ -660,7 +660,7 @@ restart:
 		    ((get_timer(0) - time_start) > time_delta)) {
 			thand_f *x;
 
-#if defined(CONFIG_ASUS_PRODUCT) && !defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO) && !defined(RTAX18)
+#if defined(CONFIG_ASUS_PRODUCT) && !defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO) && !defined(RTAX18) && !defined(RT360V6)
                        /*ASUS*/
                         if ((i & 1) == 0) {
 				func_led_off();

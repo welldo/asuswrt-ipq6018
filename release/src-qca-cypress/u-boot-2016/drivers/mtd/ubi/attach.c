@@ -79,7 +79,7 @@
 #include <div64.h>
 #include <linux/err.h>
 #endif
-#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18)
+#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18) || defined(RT360V6)
 #include "gpio.h"
 #endif
 
@@ -1251,7 +1251,7 @@ static int scan_all(struct ubi_device *ubi, struct ubi_attach_info *ai,
 			goto out_vidh;
 	}
 
-#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18)
+#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18) || defined(RT360V6)
 	asus_green_led_off();
 #endif
 	ubi_msg(ubi, "scanning is finished");

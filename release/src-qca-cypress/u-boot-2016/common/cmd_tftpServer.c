@@ -324,7 +324,7 @@ static int load_stage2(cmd_tbl_t *cmdtp, int argc, char *argv[])
 	ranand_set_sbb_max_addr(0);
 
 	if (!s2->good) {
-#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18)
+#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18) || defined(RT360V6)
 		asus_purple_led_on();
 #endif
 		printf(" \nHello!! Enter Recuse Mode: (Check error)\n\n");
@@ -367,7 +367,7 @@ static int load_asus_firmware(cmd_tbl_t *cmdtp, int argc, char * const argv[])
 #endif
 #endif
 	if (do_bootm(cmdtp, 0, argc, argv)) {
-#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18)
+#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18) || defined(RT360V6)
 		asus_purple_led_on();
 #endif
 		printf(" \nHello!! Enter Recuse Mode: (Check error)\n\n");
@@ -391,7 +391,7 @@ int do_tftpd(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		wan_red_led_on();
 		printf(" \n## Enter Rescue Mode ##\n");
 		setenv("autostart", "no");
-#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18)
+#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18) || defined(RT360V6)
 		asus_purple_led_on();
 #endif
 		/* Wait forever for an image */
@@ -410,14 +410,14 @@ int do_tftpd(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 				mdelay(90);
 				i++;
 				if (i & 1) {
-#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18)
+#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18) || defined(RT360V6)
 					asus_red_led_on();
 #else
 					power_led_on();
 #endif
 				}
 				else {
-#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18)
+#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18) || defined(RT360V6)
 					asus_red_led_off();
 #else
 					power_led_off();
@@ -593,7 +593,7 @@ static void TftpHandler(uchar * pkt, unsigned dport, struct in_addr sip, unsigne
 				{
 					puts("\n");
 				}
-#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18) // rescue process indication
+#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18) || defined(RT360V6) // rescue process indication
 			if (((TftpBlock - 1) % 1600) == 0)
 				asus_purple_led_on();
 			else if (((TftpBlock - 1) % 800) == 0)
