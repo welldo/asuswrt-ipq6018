@@ -321,7 +321,7 @@ static void boot_prep_linux(bootm_headers_t *images)
 
 	if (IMAGE_ENABLE_OF_LIBFDT && images->ft_len) {
 #if defined(CONFIG_ASUS_PRODUCT)
-#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO)
+#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18)
 		asus_green_led_on();
 #endif
 		asus_boot_args(images->fit_rfs_offset);

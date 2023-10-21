@@ -80,6 +80,51 @@ static struct gpio_s {
 		.is_led = 1,
 		.active_low = 0,
 	},
+#elif  defined(RTAX18)
+
+	[RST_BTN] =	{	/* GPIO34, Low  active, input  */
+		.name = "RESET button",
+		.gpio_nr = 9,
+		.dir = 1,
+		.is_led = 0,
+		.active_low = 1,
+	},
+	[WPS_BTN] =	{	/* GPIO9, Low  active, input  */
+		.name = "WPS button",
+		.gpio_nr = 60,
+		.dir = 1,
+		.is_led = 0,
+		.active_low = 1,
+	},
+	[WIFI_B_LED] =	{	/* GPIO#25, High active, output */
+		.name = "Blue LED",
+		.gpio_nr = 73,
+		.dir = 0,
+		.is_led = 1,
+		.active_low = 0,
+	},
+	[WIFI_G_LED] =	{	/* GPIO#32, High active, output */
+		.name = "Green LED",
+		.gpio_nr = 74,
+		.dir = 0,
+		.is_led = 1,
+		.active_low = 0,
+		.def_onoff =1, /* boot time LED */
+	},
+	[WIFI_R_LED] =	{	/* GPIO#33, High active, output */
+		.name = "Red LED",
+		.gpio_nr = 35,
+		.dir = 0,
+		.is_led = 1,
+		.active_low = 0,
+	},
+	[WIFI_W_LED] =	{	/* GPIO#22, High active, output */
+		.name = "White LED",
+		.gpio_nr = 37,
+		.dir = 0,
+		.is_led = 1,
+		.active_low = 0,
+	},
 #elif  defined(RTMANGO)
 
 	[RST_BTN] =	{	/* GPIO34, Low  active, input  */
@@ -320,7 +365,7 @@ void led_onoff(enum gpio_idx_e gpio_idx, int onoff)
 void led_init(void)
 {
 	int i;
-#if !defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO)
+#if !defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO) && !defined(RTAX18)
 	int on;
 	int on;
 #endif
@@ -332,7 +377,7 @@ void led_init(void)
 
 		if (!gpio_tbl[i].is_led)
 			continue;
-#if !defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO)
+#if !defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO) && !defined(RTAX18)
 		on = 1;
 		if (i == WAN_RED_LED || i == WAN2_RED_LED)
 			on = 0;
@@ -341,7 +386,7 @@ void led_init(void)
 		led_onoff(i, gpio_tbl[i].def_onoff);
 #endif
 	}
-#if !defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO)
+#if !defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO) && !defined(RTAX18)
 	udelay(300 * 1000UL);
 	for (i = 0; i < GPIO_IDX_MAX; i++) {
 		if (!gpio_tbl[i].name || gpio_tbl[i].dir)
@@ -503,7 +548,7 @@ void leds_off(void)
 	led_onoff(WPS_LED, 0);
 	led_onoff(FAIL_OVER_LED, 0);
 
-#if defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO)
+#if defined(PLAX56_XP4) && !defined(RTAX5) && !defined(RTMANGO) && !defined(RTAX18)
 	led_onoff(WIFI_B_LED, LED_OFF);
 	led_onoff(WIFI_R_LED, LED_OFF);
 	led_onoff(WIFI_W_LED, LED_OFF);

@@ -28,15 +28,19 @@ sudo apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git
 
 4. 使用 `git clone https://github.com/SWRT-dev/qca-toolchains` 命令下载toolchains
 
-5. 分别执行 `cd qca-toolchains`
+5. `mkdir asuswrt-ipq6018-build`
+
+6. `rsync -a --del asuswrt-ipq6018/ asuswrt-ipq6018-build`
+
+7. 分别执行 `cd qca-toolchains`
 
     `sudo ln -sf $(pwd)/openwrt-gcc520_musl.arm /opt/`
 
-6. 然后 `cd ../asuswrt-ipq6018/release/src-qca-cypress` 进入目录
+8. 然后 `cd ../asuswrt-ipq6018-build/release/src-qca-cypress` 进入目录
 
-7. 输入 `make rt-360v6` 或 `make rt-ax18` 或 `make rt-ax5` 即可开始编译你要的固件了。
+9. 输入 `make rt-360v6` 或 `make rt-ax18` 或 `make rt-ax5` 即可开始编译你要的固件了。
 
-8. 编译完成后输出固件路径：release/src-qca-cypress/image
+10. 编译完成后输出固件路径：release/src-qca-cypress/image
 
 
 

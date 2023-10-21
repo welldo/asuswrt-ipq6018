@@ -1240,7 +1240,7 @@ void ipq6018_ppe_interface_mode_init(void)
 	ppe_uniphy_mode_set(PPE_UNIPHY_INSTANCE1, mode1);
 
 	ppe_port_mux_mac_type_set(4, mode0);
-#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO)
+#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18)
 	ppe_port_mux_mac_type_set(5, mode0);
 #else
 	ppe_port_mux_mac_type_set(5, mode1);

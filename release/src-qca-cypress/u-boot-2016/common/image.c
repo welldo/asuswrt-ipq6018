@@ -38,7 +38,7 @@
 #include <u-boot/sha1.h>
 #include <asm/errno.h>
 #include <asm/io.h>
-#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO)
+#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18)
 #include "gpio.h"
 #endif
 
@@ -956,7 +956,7 @@ ulong genimg_get_image(ulong img_addr)
 			"%08lx to RAM address %08lx\n", ra_flash_offset(img_addr),
 			ram_addr );
 
-#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO)
+#if defined(PLAX56_XP4) || defined(RTAX5) || defined(RTMANGO) || defined(RTAX18)
 #define	THREE_SECONDS_BYTES	0x167A000
 		asus_green_led_on();
 		if ((d_size + h_size) > THREE_SECONDS_BYTES) {
