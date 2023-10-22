@@ -3995,6 +3995,10 @@ _dprintf("[%s, %d]\n", __FUNCTION__, __LINE__);
 		     "-u", usrstr, wild ? "-w" : "", "-e", "/sbin/ddns_updated",
 		     "-b", "/tmp/ddns.cache", NULL };
 		ret = _eval(argv, NULL, 0, &pid);
+	} else {	// Custom DDNS
+		// Block until it completes and updates the DDNS update results in nvram
+		run_custom_script("ddns-start", 120, wan_ip, NULL);
+		return 0;
 	}
 #else
 	if (*service) {
@@ -4049,12 +4053,16 @@ _dprintf("[%s, %d]\n", __FUNCTION__, __LINE__);
 
 			ret = _eval(inadyn_argv, NULL, 0, &pid);
 		}
+	} else {	// Custom DDNS
+		// Block until it completes and updates the DDNS update results in nvram
+			run_custom_script("ddns-start", 120, wan_ip, NULL);
+			return 0;
 	}
 #endif
 
 	if (ret == 0)
 		nvram_set_int("ddns_last_wan_unit", unit);
-
+	run_custom_script("ddns-start", 0, wan_ip, NULL);
 	return ret;
 }
 
@@ -10031,12 +10039,14 @@ start_services(void)
 #ifdef RTCONFIG_SSH
 	start_sshd();
 #endif
+	run_custom_script("services-start", 0, NULL, NULL);
 	return 0;
 }
 
 void
 stop_services(void)
 {
+	run_custom_script("services-stop", 0, NULL, NULL);
 #ifdef RTCONFIG_WIREGUARD
 	stop_wgsall();
 #endif
@@ -11556,7 +11566,7 @@ static int select_upgrade_fw_order(char *fwpart[2])
 void handle_notifications(void)
 {
 	char nv[256], nvtmp[32], *cmd[8], *script;
-	char *nvp, *b, *nvptr;
+	char *nvp, *b, *nvptr, *actionstr;
 	int action = 0;
 	int count;
 	int i;
@@ -11598,21 +11608,26 @@ again:
 	if(strncmp(cmd[0], "start_", 6)==0) {
 		action |= RC_SERVICE_START;
 		script = &cmd[0][6];
+		actionstr = "start";
 	}
 	else if(strncmp(cmd[0], "stop_", 5)==0) {
 		action |= RC_SERVICE_STOP;
 		script = &cmd[0][5];
+		actionstr = "stop";
 	}
 	else if(strncmp(cmd[0], "restart_", 8)==0) {
 		action |= (RC_SERVICE_START | RC_SERVICE_STOP);
 		script = &cmd[0][8];
+		actionstr = "restart";
 	}
 	else {
 		action = 0;
 		script = cmd[0];
+		actionstr = "";
 	}
 
 	TRACE_PT("running: %d %s\n", action, script);
+	run_custom_script("service-event", 120, actionstr, script);
 
 #ifdef RTCONFIG_USB_MODEM
 	if(!strcmp(script, "simauth")
@@ -16239,7 +16254,7 @@ _dprintf("goto again(%d)...\n", getpid());
 		unsetenv("unit");
 	}
 #endif
-
+	run_custom_script("service-event-end", 0, actionstr, script);
 	nvram_set("rc_service", "");
 	nvram_set("rc_service_pid", "");
 _dprintf("handle_notifications() end\n");
@@ -17019,6 +17034,7 @@ _dprintf("nat_rule: the nat rule file was not ready. wait %d seconds...\n", retr
 	setup_ct_timeout(TRUE);
 	setup_udp_timeout(TRUE);
 
+	run_custom_script("nat-start", 0, NULL, NULL);
 	return NAT_STATE_NORMAL;
 }
 
