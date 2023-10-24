@@ -1,3 +1,6 @@
 {
-    "cmake.sourceDirectory": "/home/akito/asuswrt-ipq6018/release/src-qca-cypress"
+    "cmake.sourceDirectory": "/home/akito/asuswrt-ipq6018/release/src-qca-cypress",
+    "files.associations": {
+        "*.in": "c"
+    }
 }

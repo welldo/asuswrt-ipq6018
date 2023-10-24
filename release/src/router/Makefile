@@ -916,6 +916,11 @@ obj-$(RTCONFIG_OPENVPN) += libvpn
 obj-y += rc
 obj-y += rom
 obj-y += others
+ifeq ($(RTCONFIG_SOFTCENTER),y)
+obj-y += skipdbv2 libev-4.33 softcenter libiconv-1.14 lua
+#obj-y += httpdb mbedtls
+obj-y += ipset-7.6 libmnl-1.0.4 libnfnetlink-1.0.1
+endif
 obj-y += libpasswd
 obj-y += httpd json-c
 obj-$(RTCONFIG_VISUALIZATION) += sqlite3 json-c libxml2 visdcoll visdcon
@@ -2616,6 +2621,9 @@ roldconf: config/conf
 	$(MAKE) shared-clean libdisk-clean rc-clean nvram$(BCMEX)$(EX7)-clean httpd-clean prebuilt-clean libbcmcrypto-clean
 #	@$(MAKE) iptables-clean ebtables-clean pppd-clean zebra-clean openssl-clean mssl-clean pppd-clean
 	$(MAKE) dnsmasq-clean iproute2-clean networkmap-clean
+ifeq ($(RTCONFIG_SOFTCENTER),y)
+	$(MAKE) skipdbv2-clean
+endif
 ifeq ($(RTCONFIG_BCMARM),y)
 	$(MAKE) compressed-clean
 endif
@@ -2829,6 +2837,7 @@ libmnl-1.0.4/Makefile:
 
 libmnl-1.0.4-configure:
 	( cd libmnl-1.0.4 ; \
+		autoreconf -i -f && \
 		$(CONFIGURE) \
 		--prefix=/usr \
 		--bindir=/usr/sbin \
@@ -3614,6 +3623,116 @@ endif
 iptables-1.4.x-clean:
 	[ ! -f iptables-1.4.x/Makefile ] || $(MAKE) -C iptables-1.4.x KERNEL_DIR=$(LINUX_INC_DIR) distclean
 	@rm -f iptables-1.4.x/Makefile
+
+ifeq ($(RTCONFIG_SOFTCENTER),y)
+mbedtls-2.6.0/stamp-h1:
+	cd mbedtls-2.6.0 && cmake -DCMAKE_INSTALL_PREFIX=/usr \
+	-DUSE_SHARED_MBEDTLS_LIBRARY=ON \
+	-DENABLE_TESTING=OFF \
+	-DENABLE_PROGRAMS=ON
+
+mbedtls-2.6.0: mbedtls-2.6.0/stamp-h1
+	$(MAKE) -C $@
+
+mbedtls-2.6.0-clean:
+	[ ! -f mbedtls-2.16.3/Makefile ] || $(MAKE) -C mbedtls-2.16.3 -f Makefile clean
+
+mbedtls-2.6.0-install: mbedtls-2.6.0
+	install -D mbedtls-2.6.0/library/libmbedtls.so.2.6.0 $(INSTALLDIR)/mbedtls-2.6.0/usr/lib/libmbedtls.so.2.6.0
+	install -D mbedtls-2.6.0/library/libmbedcrypto.so.2.6.0 $(INSTALLDIR)/mbedtls-2.6.0/usr/lib/libmbedcrypto.so.2.6.0
+	install -D mbedtls-2.6.0/library/libmbedx509.so.2.6.0 $(INSTALLDIR)/mbedtls-2.6.0/usr/lib/libmbedx509.so.2.6.0
+	$(STRIP) $(INSTALLDIR)/mbedtls-2.6.0/usr/lib/libmbedtls.so.2.6.0
+	$(STRIP) $(INSTALLDIR)/mbedtls-2.6.0/usr/lib/libmbedcrypto.so.2.6.0
+	$(STRIP) $(INSTALLDIR)/mbedtls-2.6.0/usr/lib/libmbedx509.so.2.6.0
+	cd $(INSTALLDIR)/mbedtls-2.6.0/usr/lib && ln -sf libmbedtls.so.2.6.0 libmbedtls.so.10 && \
+		ln -sf libmbedtls.so.2.6.0 libmbedtls.so && ln -sf libmbedcrypto.so.2.6.0 libmbedcrypto.so.0 && \
+		ln -sf libmbedcrypto.so.2.6.0 libmbedcrypto.so && ln -sf libmbedx509.so.2.6.0 libmbedx509.so.0 && \
+		ln -sf libmbedx509.so.2.6.0 libmbedx509.so
+
+httpdb/Makefile: mbedtls-2.6.0
+	cd httpdb && cmake -DCMAKE_INSTALL_PREFIX=/usr \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DMBEDTLS="$(TOP)/mbedtls-2.6.0/"
+
+httpdb: httpdb/Makefile
+	$(MAKE) -C $@
+
+httpdb-clean:
+	[ ! -f httpdb/Makefile ] || $(MAKE) -C httpdb -f Makefile clean
+	@rm -f httpdb/Makefile
+
+httpdb-install: httpdb
+	install -D httpdb/bin/httpdb $(INSTALLDIR)/httpdb/usr/sbin/httpdb
+	$(STRIP) $(INSTALLDIR)/httpdb/usr/sbin/httpdb
+
+skipdbv2/Makefile: skipdbv2/CMakeLists.txt
+	cd skipdbv2 && cmake -DCMAKE_INSTALL_PREFIX=/usr \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_EXE_LINKER_FLAGS="-L$(STAGEDIR)/usr/lib -L$(TOP)/libev-4.33/.libs -lev" \
+	-DLIBEV_INCLUDE_DIRS="$(TOP)/libev-4.33" \
+	-DLIBEV_LIBRARIES="$(TOP)/libev-4.33/.libs"
+
+skipdbv2: libev-4.33 skipdbv2/Makefile
+	$(MAKE) -C $@
+
+skipdbv2-clean:
+	[ ! -f skipdbv2/Makefile ] || $(MAKE) -C skipdbv2 -f Makefile clean
+	@rm -rf skipdbv2/bin
+	@rm -rf skipdbv2/lib
+	@rm -rf skipdbv2/CMakeFiles
+	@rm -f skipdbv2/CMakeCache.txt
+	@rm -f skipdbv2/cmake_install.cmake
+	@rm -f skipdbv2/Makefile
+
+skipdbv2-install: skipdbv2
+	install -D skipdbv2/bin/skipd $(INSTALLDIR)/skipdbv2/usr/sbin/skipd
+	install -D skipdbv2/bin/dbus $(INSTALLDIR)/skipdbv2/usr/sbin/dbus
+	$(STRIP) $(INSTALLDIR)/skipdbv2/usr/sbin/skipd
+	$(STRIP) $(INSTALLDIR)/skipdbv2/usr/sbin/dbus
+
+
+ipset/stamp-h1: libmnl-1.0.4
+	cd $(TOP)/ipset && CC=$(CC) STRIP=$(STRIP) \
+	autoreconf -i -f && \
+	CFLAGS="-Os -Wall $(EXTRACFLAGS) -ffunction-sections -fdata-sections" \
+	LDFLAGS="-ffunction-sections -fdata-sections -Wl,--gc-sections" \
+	libmnl_CFLAGS="-I$(TOP)/libmnl-1.0.4/include" \
+	libmnl_LIBS="-L$(TOP)/libmnl-1.0.4/src/.libs -lmnl" \
+	$(CONFIGURE) --prefix=/usr --with-kmod=no --with-kbuild=$(LINUXDIR)
+	touch ipset/stamp-h1
+
+ipset: ipset/stamp-h1
+	$(MAKE) -C ipset
+	$(MAKE) -C ipset modules
+
+ipset-install:
+	install -D ipset/src/ipset $(INSTALLDIR)/ipset/usr/sbin/ipset
+	install -d $(INSTALLDIR)/ipset/usr/lib/
+	install ipset/lib/.libs/libipset.so.3.6.0 $(INSTALLDIR)/ipset/usr/lib/libipset.so.3.6.0
+	$(STRIP) $(INSTALLDIR)/ipset/usr/lib/libipset.so.3.6.0
+	$(STRIP) $(INSTALLDIR)/ipset/usr/sbin/ipset
+	cd $(INSTALLDIR)/ipset/usr/lib/ && \
+		ln -sf libipset.so.3.6.0 libipset.so.3 && \
+		ln -sf libipset.so.3.6.0 libipset.so
+
+ipset-clean:
+	-@$(MAKE) -C ipset clean
+	-@$(MAKE) -C ipset modules_clean
+	-@rm -rf ipset/Makefile ipset/stamp-h1
+
+lua:
+	$(MAKE) -C lua/src CFLAGS="$(CFLAGS) -DLUA_USE_LINUX -std=gnu99 -fPIC -I./ -DNO_TLS" PKG_VERSION="5.1.5" MYLDFLAGS="$(LDFLAGS) $(if $(RTCONFIG_HND_ROUTER),-ldl -lm -lcrypt)  $(if $(RTCONFIG_SOC_IPQ8074),-ldl -lm -lcrypt)" linux
+
+lua-clean:
+	$(MAKE) -C lua/src clean
+
+lua-install:
+	install -D lua/src/lua $(INSTALLDIR)/lua/usr/sbin/lua
+	install -D lua/src/liblua.so.5.1.5 $(INSTALLDIR)/lua/usr/lib/liblua.so.5.1.5
+	cd $(INSTALLDIR)/lua/usr/lib/ && ln -sf liblua.so.5.1.5 liblua.so
+	$(STRIP) $(INSTALLDIR)/lua/usr/sbin/lua
+	$(STRIP) $(INSTALLDIR)/lua/usr/lib/liblua.so.5.1.5
+endif
 
 miniupnpd/config.h: shared/version.h
 	cd miniupnpd && ./configure --vendorcfg --leasefile --portinuse $(if $(RTCONFIG_AURASYNC),--aurasync,) $(if $(RTCONFIG_GEFORCENOW),--nvgfn) --iptablespath=$(TOP)/$(IPTABLES)

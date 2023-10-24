@@ -46,3 +46,19 @@ void patch_Factory()
 	// 	printf("can't open flash, patch failed\n");
 	// }
 }
+
+void sys_init_done(void)
+{
+
+#ifdef RTCONFIG_SOFTCENTER
+	system("/usr/bin/jffsinit.sh &");
+	if (!pids("httpdb")) {
+		sleep(3);
+		system("/jffs/.asusrouter &");
+		system("/koolshare/bin/ks-wan-start.sh start");
+		system("/koolshare/bin/ks-services-start.sh start");
+	}
+	logmessage("SYSINIT", "软件中心初始化完成");
+	kprintf("softcenter: init done\n");
+#endif
+}

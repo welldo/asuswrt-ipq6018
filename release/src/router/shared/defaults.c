@@ -4111,6 +4111,9 @@ struct nvram_tuple router_defaults[] = {
 	{ "nordvpn_exchange_token", "", CKN_STR128, CKN_TYPE_DEFAULT, CKN_ACC_LEVEL_DEFAULT, CKN_ENC_DEFAULT, 0 },
 #endif
 #endif
+#ifdef RTCONFIG_SOFTCENTER
+	{ "httpd_delay", "100000", CKN_STR7, CKN_TYPE_DEFAULT, CKN_ACC_LEVEL_DEFAULT, CKN_ENC_DEFAULT, 0 },
+#endif
 	{ 0, 0, 0, 0, 0, 0, 0 }
 }; // router_defaults
 
