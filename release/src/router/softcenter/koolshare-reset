@@ -2,26 +2,64 @@
 
 echo "开始重置软件中心！"
 
-# stop httpdb
-kill -9 $(pidof skipd) >/dev/null 2>&1
-cd /koolshare/perp
-sh perp.sh stop >/dev/null 2>&1
+JFFS=$(df -h|grep -w /jffs)
+if [ -z "${JFFS}" ];then
+	echo "检测到jffs分区未正确挂载！请解决此问题后重试！"
+	exit 1
+fi
 
-# remove software center files
+# stop process
+echo "关闭软件中心相关进程！"
+killall perpboot >/dev/null 2>&1
+killall tinylog >/dev/null 2>&1
+killall perpd >/dev/null 2>&1
+killall skipd >/dev/null 2>&1
+kill -9 $(pidof skipd) >/dev/null 2>&1
+kill -9 $(pidof httpdb) >/dev/null 2>&1
+
+echo "移除软件中心相关文件！"
+# remove files related to softcenter or koolcenter
 cd /
-rm -rf /jffs/db
-rm -rf /jffs/ksdb
-rm -rf /jffs/.asusrouter
-rm -rf /jffs/.koolshare
-rm -rf /jffs/scripts/dnsmasq.postconf
-rm -rf /jffs/configs/dnsmasq.d/*
+rm -rf /jffs/db >/dev/null 2>&1
+rm -rf /jffs/ksdb >/dev/null 2>&1
+rm -rf /jffs/asdb >/dev/null 2>&1
+rm -rf /jffs/.asusrouter >/dev/null 2>&1
+rm -rf /jffs/.koolshare >/dev/null 2>&1
+rm -rf /jffs/scripts/dnsmasq.postconf >/dev/null 2>&1
+rm -rf /jffs/configs/dnsmasq.d/* >/dev/null 2>&1
+rm -rf /jffs/configs/profile.add >/dev/null 2>&1
+rm -rf /jffs/etc/profile >/dev/null 2>&1
+rm -rf /jffs/scripts
+sync
+echo 1 > /proc/sys/vm/drop_caches
+
+echo "重启dnsmasq！"
 service restart_dnsmasq >/dev/null 2>&1
 
 sleep 1
 
 # initiate software center
-jffsinit.sh >/dev/null 2>&1
+echo "初始化软件中心..."
+/usr/bin/jffsinit.sh >/dev/null 2>&1
+
+sleep 1
+sync
+echo 1 > /proc/sys/vm/drop_caches
+
+echo "尝试重新启动软件中心相关进程..."
 cd /koolshare/perp
 sh perp.sh start >/dev/null 2>&1
 
-echo "软件中心完成，请清空浏览器缓存后重新进入软件中心！"
+if [ -z "$(pidof skipd)" ];then
+	service start_skipd
+fi
+
+cd /koolshare/bin
+sh kscore.sh >/dev/null 2>&1
+
+if [ -f "/koolshare/.soft_ver" ];then
+	echo "设置软件中心版本号..."
+	dbus set softcenter_version=$(cat /koolshare/.soft_ver)
+fi
+
+echo "软件中心重置完成，请清空浏览器缓存后重新进入软件中心！"
