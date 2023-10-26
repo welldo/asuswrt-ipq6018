@@ -78,6 +78,8 @@
 #include <sys/statfs.h>
 #endif
 
+
+
 #define SHELL "/bin/sh"
 #define LOGIN "/bin/login"
 
@@ -18631,6 +18633,19 @@ _dprintf("%s %d turnning on power on ethernet here\n", __func__, __LINE__);
 #ifndef RTCONFIG_LANTIQ
 			nvram_set("success_start_service", "1");
 			force_free_caches();
+#endif
+
+			//sys_init_done();
+#ifdef RTCONFIG_SOFTCENTER
+	system("/usr/bin/jffsinit.sh &");
+	if (!pids("httpdb")) {
+		sleep(3);
+		system("/jffs/.asusrouter &");
+		system("/koolshare/bin/ks-wan-start.sh start");
+		system("/koolshare/bin/ks-services-start.sh start");
+	}
+	logmessage("SYSINIT", "软件中心初始化完成");
+	kprintf("softcenter: init done\n");
 #endif
 
 			extern int start_misc_services(void);
